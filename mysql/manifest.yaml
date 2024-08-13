@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  #These labels are related to deployment
+  labels:
+    component: mysql
+    project: expense
+    tier: db
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: mysql
+      project: expense
+      tier: db
+      #pod definintion
+  template:
+    metadata:
+      labels:
+        component: mysql
+        project: expense
+        tier: db
+    spec:
+      containers:
+      - name: mysql
+        image: joindevops/mysql:v1.0  
+        
