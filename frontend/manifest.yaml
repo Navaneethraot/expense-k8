@@ -1,0 +1,58 @@
+# kind: Configmaps
+# apiVersion: V1
+# metadata:
+#   name: frontend
+#   namespace: expense
+# data:
+#   DB_HOST: mysql #mysql component service name
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: expense
+  #These labels are related to deployment
+  labels:
+    component: frontend
+    project: expense
+    tier: web
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: frontend
+      project: expense
+      tier: web
+
+      #pod definintion
+  template:
+    metadata:
+      labels:
+        component: frontend
+        project: expense
+        tier: web
+    spec:
+      containers:
+      - name: frontend
+        image: joindevops/frontend:v1.0  
+        # envFrom: 
+        # - configMapRef:
+        #    name: frontend
+---
+apiVersion: V1
+kind: service
+metadata:
+  name: frontend
+  namespace: expense
+spec:
+  type: LoadBalancer
+selector:
+    component: frontend
+    project: expense
+    tier: web
+ports:
+  - protocols: TCP  
+    port: 80 #service-port
+    targetport: 80 #target-port
