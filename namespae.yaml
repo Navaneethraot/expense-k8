@@ -1,5 +1,5 @@
 kind: Namespace
-appVersion: V1
+apiVersion: V1
 metadata:
   name: expense
   labels:
