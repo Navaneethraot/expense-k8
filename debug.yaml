@@ -7,4 +7,3 @@ spec:
   containers:
   - name: debug
     image: joindevops/debug:v1.0
-
