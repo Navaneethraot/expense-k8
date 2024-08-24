@@ -125,8 +125,8 @@ spec:
         image: joindevops/frontend:v1.0
         volumeMounts:
         - name: nginix-conf
-          mountpath: /etc/nginx/nginx.conf
-          subpath: nginix.conf
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginix.conf
           readOnly: true
         # envFrom: 
         # - configMapRef:
