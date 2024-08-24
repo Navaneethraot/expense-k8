@@ -1,20 +1,20 @@
-kind: Configmaps
+kind: ConfigMap
 apiVersion: v1
 metadata:
   name: frontend
   namespace: expense
 data:
-  nginx.conf: |
-    user www-data;
-    worker_processes 4;
-    pid /var/run/nginx.pid;
+  nginix.conf : |
+  user www-data;
+  worker_processes 4;
+  pid /var/run/nginx.pid;
 
-    events {
+  events {
     worker_connections 768;
     # multi_accept on;
-    }
+  }
 
-    http {
+  http {
 
     ##
     # Basic Settings
@@ -53,44 +53,45 @@ data:
     include /etc/nginx/sites-enabled/*;
 
     server {
-    listen       8080;
-    server_name  localhost;
+      listen       8080;
+      server_name  localhost;
 
-    proxy_http_version 1.1;
+      proxy_http_version 1.1;
 
-    #charset koi8-r;
-    #access_log  /var/log/nginx/host.access.log  main;
-    #error_log /dev/stdout debug;
-    #rewrite_log on;
+      #charset koi8-r;
+      #access_log  /var/log/nginx/host.access.log  main;
+      #error_log /dev/stdout debug;
+      #rewrite_log on;
 
-    location / {
-        root   /usr/share/nginx/html;
-        index  index.html index.htm;
-        ssi    on;
-    }
+      location / {
+          root   /usr/share/nginx/html;
+          index  index.html index.htm;
+          ssi    on;
+      }
 
-    location /images/ {
-        expires 5s;
-        root   /usr/share/nginx/html;
-        try_files $uri /images/placeholder.png;
-    }
+      location /images/ {
+          expires 5s;
+          root   /usr/share/nginx/html;
+          try_files $uri /images/placeholder.png;
+      }
 
-    #error_page  404              /404.html;
+      #error_page  404              /404.html;
 
-    # redirect server error pages to the static page /50x.html
-    #
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-        root   /usr/share/nginx/html;
-    }
+      # redirect server error pages to the static page /50x.html
+      #
+      error_page   500 502 503 504  /50x.html;
+      location = /50x.html {
+          root   /usr/share/nginx/html;
+      }
 
-    location /api/ { 
-        proxy_pass http://backend:8080/;
-    }
+      location /api/ { 
+          proxy_pass http://backend:8080/;
+      }
 
-    }
+      }
 
-    }
+  }
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -121,38 +122,35 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: joindevops/frontend:v1.0  
-        Volumemounts:
-        - name: nginx-conf
+        image: joindevops/frontend:v1.0
+        volumeMounts:
+        - name: nginix-conf
           mountpath: /etc/nginx/nginx.conf
-          subpath: nginx.conf
+          subpath: nginix.conf
           readOnly: true
         # envFrom: 
         # - configMapRef:
-        #    name: frontend
-      volumes: 
-      - name: nginx-conf
-        configMaps:
+        #     name: frontend
+      volumes:
+      - name: nginix-conf
+        configMap:
+          name: frontend
           items:
-          - name: nginx-conf
-            path: nginx-conf
+            - key: nginix.conf
+              path: nginix.conf    
 ---
 apiVersion: v1
-kind: service
+kind: Service
 metadata:
   name: frontend
   namespace: expense
 spec:
   type: LoadBalancer
-selector:
+  selector:
     component: frontend
     project: expense
     tier: web
-ports:
-  - protocols: TCP  
+  ports:
+  - protocol: TCP  
     port: 80 #service-port
-<<<<<<< HEAD
-    targetport: 8080 #target-port
-=======
-    targetport: 80 #target-port
->>>>>>> 6c66b7fa7516cdac3ddea8f3356480d50e1cf1be
+    targetPort: 80 #target-port
