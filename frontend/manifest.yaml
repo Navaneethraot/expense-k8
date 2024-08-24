@@ -1,5 +1,5 @@
 kind: Configmaps
-apiVersion: V1
+apiVersion: v1
 metadata:
   name: frontend
   namespace: expense
@@ -137,7 +137,7 @@ spec:
           - name: nginx-conf
             path: nginx-conf
 ---
-apiVersion: V1
+apiVersion: v1
 kind: service
 metadata:
   name: frontend
@@ -151,4 +151,8 @@ selector:
 ports:
   - protocols: TCP  
     port: 80 #service-port
+<<<<<<< HEAD
     targetport: 8080 #target-port
+=======
+    targetport: 80 #target-port
+>>>>>>> 6c66b7fa7516cdac3ddea8f3356480d50e1cf1be
