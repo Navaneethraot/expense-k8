@@ -1,4 +1,4 @@
-kind: Configmaps
+kind: ConfigMap
 apiVersion: v1
 metadata:
   name: backend
@@ -42,7 +42,7 @@ spec:
            name: backend
 ---
 apiVersion: v1
-kind: service
+kind: Service
 metadata:
   name: backend
   namespace: expense
